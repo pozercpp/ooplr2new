@@ -6,10 +6,10 @@ int main() {
   std::cin >> aa;
   Decimal a(aa);
   Decimal b({1, 2, 3});
-  Decimal res1 = a + b;
+  Decimal res1 = plus(a, b);
   res1.print();
   std::cout << std::endl;
-  Decimal res2 = a - b;
+  Decimal res2 = sub(a, b);
   res2.print();
   std::cout << std::endl;
   return 0;

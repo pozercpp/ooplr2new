@@ -1,10 +1,14 @@
-#ifndef DECIMALE_H
-#define DECIMALE_H
+#pragma once
 
 #include <initializer_list>
 
 class Decimal {
 public:
+  unsigned char *v;
+
+  void pop();
+  void push(unsigned char);
+
   Decimal();
   Decimal(std::initializer_list<unsigned char>);
   Decimal(unsigned long long);
@@ -16,24 +20,21 @@ public:
   
   int len();
 
-  friend Decimal operator+(Decimal, Decimal);
-  friend Decimal operator-(Decimal, Decimal);
-  friend bool operator==(Decimal, Decimal);
-  friend bool operator!=(Decimal, Decimal);
-  friend bool operator<(Decimal, Decimal);
-  friend bool operator>(Decimal, Decimal);
-  friend bool operator<=(Decimal, Decimal);
-  friend bool operator>=(Decimal, Decimal);
-
   void print();
 
 private:
-  unsigned char *v;
   int size;
   int capacity;
 
-  void pop();
-  void push(unsigned char);
   void resize(int);
 };
-#endif
+
+Decimal plus(Decimal, Decimal);
+Decimal sub(Decimal, Decimal);
+
+bool equals(Decimal, Decimal);
+bool greater(Decimal, Decimal);
+bool less(Decimal, Decimal);
+bool equalsgreater(Decimal, Decimal);
+bool equalsless(Decimal, Decimal);
+bool notequals(Decimal, Decimal);

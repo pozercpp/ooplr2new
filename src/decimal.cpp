@@ -24,8 +24,8 @@ void Decimal::push(unsigned char c) {
 }
 
 void Decimal::pop() {
-  if (size > 0) {
-    size--;
+  if (size) {
+    --size;
   }
 }
 
@@ -68,6 +68,8 @@ Decimal::~Decimal() {
     }
     size = 0;
     capacity = 1;
+    v = (unsigned char *)malloc(sizeof(unsigned char) * capacity);
+    push(0);
 }
 
 Decimal::Decimal(const Decimal& other) : size(other.size), capacity(other.capacity) {
@@ -86,7 +88,7 @@ Decimal::Decimal(Decimal&& other) noexcept
 
 int Decimal::len() { return size; }
 
-bool operator==(Decimal a, Decimal b) {
+bool equals(Decimal a, Decimal b) {
   if (a.len() != b.len()) {
     return false;
   }
@@ -98,7 +100,7 @@ bool operator==(Decimal a, Decimal b) {
   return true;
 }
 
-bool operator!=(Decimal a, Decimal b) {
+bool notequals(Decimal a, Decimal b) {
   if (a.len() != b.len()) {
     return true;
   }
@@ -110,7 +112,7 @@ bool operator!=(Decimal a, Decimal b) {
   return false;
 }
 
-bool operator>(Decimal a, Decimal b) {
+bool greater(Decimal a, Decimal b) {
   if (a.len() != b.len()) {
     return a.len() > b.len();
   }
@@ -122,7 +124,7 @@ bool operator>(Decimal a, Decimal b) {
   return true;
 }
 
-bool operator<(Decimal a, Decimal b) {
+bool less(Decimal a, Decimal b) {
   if (a.len() != b.len()) {
     return a.len() < b.len();
   }
@@ -134,13 +136,13 @@ bool operator<(Decimal a, Decimal b) {
   return true;
 }
 
-bool operator>=(Decimal a, Decimal b) { return a > b || a == b; }
+bool equalsgreater(Decimal a, Decimal b) { return greater(a, b) || equals(a, b); }
 
-bool operator<=(Decimal a, Decimal b) { return a < b || a == b; }
+bool equalsless(Decimal a, Decimal b) { return less(a, b) || equals(a, b); }
 
-Decimal operator+(Decimal a, Decimal b) {
+Decimal plus(Decimal a, Decimal b) {
   if (a.len() < b.len()) {
-    return b + a;
+    return plus(b, a);
   }
   Decimal res;
   for (int i = 0; i < a.len(); ++i) {
@@ -159,8 +161,8 @@ Decimal operator+(Decimal a, Decimal b) {
   return res;
 }
 
-Decimal operator-(Decimal a, Decimal b) {
-  if (a < b) {
+Decimal sub(Decimal a, Decimal b) {
+  if (less(a, b)) {
     return Decimal(0ull);
   }
   Decimal res;
