@@ -2,98 +2,65 @@
 #include <initializer_list>
 #include <iostream>
 
+unsigned char Decimal::get(size_t i) {
+  return v.get(i);
+}
+
 void Decimal::print() {
-  for (int i = size - 1; i > -1; --i) {
-    printf("%d", (int)v[i]);
+  for (int i = v.len() - 1; i > -1; --i) {
+    printf("%d", (int)v.get(i));
   }
-  if (size == 0) {
+  if (v.len() == 0) {
     printf("0");
   }
 }
 
-void Decimal::resize(int newsize) {
-  capacity = newsize;
-  v = (unsigned char *)realloc(v, sizeof(unsigned char) * capacity);
-}
-
-void Decimal::push(unsigned char c) {
-  if (size >= capacity) {
-    resize(2 * capacity);
-  }
-  v[size++] = c;
-}
-
-void Decimal::pop() {
-  if (size) {
-    --size;
-  }
-}
-
-Decimal::Decimal(std::initializer_list<unsigned char> a)
-    : v(nullptr), size(0), capacity(1) {
-  v = (unsigned char *)malloc(sizeof(unsigned char) * capacity);
+Decimal::Decimal(std::initializer_list<unsigned char> a) : v() {
   for (auto c : a) {
-    push(c);
+    v.push(c);
   }
-  for (int i = 0; 2 * i < size; ++i) {
-    std::swap(v[i], v[size - i - 1]);
+  for (size_t i = 0; 2 * i < v.len(); ++i) {
+    v.swap(i, v.len() - i - 1);
   }
 }
 
-Decimal::Decimal() : size(0), capacity(1) {
-  v = (unsigned char *)malloc(sizeof(unsigned char) * capacity);
-  push(0);
+Decimal::Decimal() : v() {
 }
 
-Decimal::Decimal(unsigned int n) : size(0), capacity(1) {
-  v = (unsigned char *)malloc(sizeof(unsigned char) * capacity);
+Decimal::Decimal(unsigned int n) : v() {
   while (n) {
-    push(n % 10);
+    v.push(n % 10);
     n /= 10;
   }
 }
 
-Decimal::Decimal(unsigned long long n) : size(0), capacity(1) {
-  v = (unsigned char *)malloc(sizeof(unsigned char) * capacity);
+Decimal::Decimal(unsigned long long n) : v() {
   while (n) {
-    push(n % 10);
+    v.push(n % 10);
     n /= 10;
   }
 }
 
 Decimal::~Decimal() {
-    if (v != nullptr) {
-        delete[] v;
-        v = nullptr;
-    }
-    size = 0;
-    capacity = 1;
-    v = (unsigned char *)malloc(sizeof(unsigned char) * capacity);
-    push(0);
+  v.clear();
 }
 
-Decimal::Decimal(const Decimal& other) : size(other.size), capacity(other.capacity) {
-    v = (unsigned char *)malloc(sizeof(unsigned char) * capacity);
-    for (int i = 0; i < size; ++i) {
-        v[i] = other.v[i];
-    }
+Decimal::Decimal(const Decimal& other) : v(other.v) {
 }
 
 Decimal::Decimal(Decimal&& other) noexcept 
-    : v(other.v), size(other.size), capacity(other.capacity) {
-    other.v = nullptr;
-    other.size = 0;
-    other.capacity = 1;
+    : v(other.v) {
+    other.v.clear();
 }
 
-int Decimal::len() { return size; }
+int Decimal::len() { return v.len(); }
 
 bool equals(Decimal a, Decimal b) {
   if (a.len() != b.len()) {
     return false;
   }
   for (int i = 0; i < a.len(); ++i) {
-    if (a.v[i] != b.v[i]) {
+    if (a.get(i) != b.get(i)) {
       return false;
     }
   }
@@ -105,7 +72,7 @@ bool notequals(Decimal a, Decimal b) {
     return true;
   }
   for (int i = 0; i < a.len(); ++i) {
-    if (a.v[i] != b.v[i]) {
+    if (a.get(i) != b.get(i)) {
       return true;
     }
   }
@@ -117,7 +84,7 @@ bool greater(Decimal a, Decimal b) {
     return a.len() > b.len();
   }
   for (int i = 0; i < a.len(); ++i) {
-    if (a.v[i] < b.v[i]) {
+    if (a.get(i) < b.get(i)) {
       return false;
     }
   }
@@ -129,7 +96,7 @@ bool less(Decimal a, Decimal b) {
     return a.len() < b.len();
   }
   for (int i = 0; i < a.len(); ++i) {
-    if (a.v[i] > b.v[i]) {
+    if (a.get(i) > b.get(i)) {
       return false;
     }
   }
@@ -147,15 +114,17 @@ Decimal plus(Decimal a, Decimal b) {
   Decimal res;
   for (int i = 0; i < a.len(); ++i) {
     if (res.len() <= i) {
-      res.push((int)0);
+      res.v.push((int)0);
     }
-    int sum = (int)res.v[i] + (int)a.v[i];
+    int sum = res.v.get(i);
+    res.v.pop();
+    sum += (int)res.v.get(i) + (int)a.get(i);
     if (i < b.len()) {
-      sum = sum + (int)b.v[i];
+      sum = sum + (int)b.get(i);
     }
-    res.v[i] = sum % 10;
+    res.v.push(sum % 10);
     if (sum > 9) {
-      res.push(1);
+      res.v.push(1);
     }
   }
   return res;
@@ -168,12 +137,9 @@ Decimal sub(Decimal a, Decimal b) {
   Decimal res;
   int prev = 0;
   for (int i = 0; i < a.len(); ++i) {
-    if (res.len() <= i) {
-      res.push(0);
-    }
-    int rz = a.v[i] - prev;
+    int rz = a.v.get(i) - prev;
     if (i < b.len()) {
-      rz -= b.v[i];
+      rz -= b.v.get(i);
     }
     if (rz < 0) {
       prev = 1;
@@ -181,10 +147,10 @@ Decimal sub(Decimal a, Decimal b) {
     } else {
       prev = 0;
     }
-    res.v[i] = rz;
+    res.v.push(rz);
   }
-  while ((int)res.v[res.len() - 1] == 0) {
-    res.pop();
+  while ((int)res.v.get(res.len() - 1) == 0) {
+    res.v.pop();
   }
   return res;
 }

@@ -1,13 +1,11 @@
 #pragma once
 
 #include <initializer_list>
+#include <myvector.h>
+#include <iostream>
 
 class Decimal {
 public:
-  unsigned char *v;
-
-  void pop();
-  void push(unsigned char);
 
   Decimal();
   Decimal(std::initializer_list<unsigned char>);
@@ -17,16 +15,14 @@ public:
   ~Decimal();
   Decimal(const Decimal&);
   Decimal(Decimal&&) noexcept;
+
+  unsigned char get(size_t);
   
   int len();
 
   void print();
-
-private:
-  int size;
-  int capacity;
-
-  void resize(int);
+  
+  myvector v;
 };
 
 Decimal plus(Decimal, Decimal);
