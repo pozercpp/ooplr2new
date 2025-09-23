@@ -2,16 +2,14 @@
 #include <initializer_list>
 #include <iostream>
 
-unsigned char Decimal::get(size_t i) {
-  return v.get(i);
-}
+unsigned char Decimal::get(size_t i) { return v.get(i); }
 
 void Decimal::print() {
   for (int i = v.len() - 1; i > -1; --i) {
-    printf("%d", (int)v.get(i));
+    std::cout << (int)v.get(i);
   }
   if (v.len() == 0) {
-    printf("0");
+    std::cout << 0;
   }
 }
 
@@ -24,8 +22,7 @@ Decimal::Decimal(std::initializer_list<unsigned char> a) : v() {
   }
 }
 
-Decimal::Decimal() : v() {
-}
+Decimal::Decimal() : v() {}
 
 Decimal::Decimal(unsigned int n) : v() {
   while (n) {
@@ -41,17 +38,11 @@ Decimal::Decimal(unsigned long long n) : v() {
   }
 }
 
-Decimal::~Decimal() {
-  v.clear();
-}
+Decimal::~Decimal() { v.clear(); }
 
-Decimal::Decimal(const Decimal& other) : v(other.v) {
-}
+Decimal::Decimal(const Decimal &other) : v(other.v) {}
 
-Decimal::Decimal(Decimal&& other) noexcept 
-    : v(other.v) {
-    other.v.clear();
-}
+Decimal::Decimal(Decimal &&other) noexcept : v(other.v) { other.v.clear(); }
 
 int Decimal::len() { return v.len(); }
 
@@ -103,7 +94,9 @@ bool less(Decimal a, Decimal b) {
   return true;
 }
 
-bool equalsgreater(Decimal a, Decimal b) { return greater(a, b) || equals(a, b); }
+bool equalsgreater(Decimal a, Decimal b) {
+  return greater(a, b) || equals(a, b);
+}
 
 bool equalsless(Decimal a, Decimal b) { return less(a, b) || equals(a, b); }
 
