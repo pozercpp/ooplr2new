@@ -1,24 +1,25 @@
 #pragma once
-#include<iostream>
+#include <iostream>
 
-class myvector {
+class MyVector {
 private:
-    size_t size;
-    size_t capacity;
-    unsigned char* v;
-    void resize(size_t sz);
+  size_t size;
+  size_t capacity;
+  unsigned char *v;
+  void resize(size_t sz);
+
 public:
-    void push(unsigned char);
-    void pop();
-    void clear();
+  void push(unsigned char);
+  void pop();
+  void clear();
 
-    unsigned char get(size_t) const;
+  unsigned char get(size_t) const;
 
-    void swap(size_t, size_t);
+  void swap(size_t, size_t);
 
-    size_t len();
+  size_t len() const;
 
-    myvector(const myvector&);
-    myvector();
-    ~myvector();
+  MyVector(const MyVector &);
+  MyVector();
+  ~MyVector();
 };
