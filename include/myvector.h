@@ -19,6 +19,7 @@ public:
 
   size_t len() const;
 
+  MyVector(MyVector&&);
   MyVector(const MyVector &);
   MyVector();
   ~MyVector();
