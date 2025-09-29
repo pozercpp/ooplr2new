@@ -8,8 +8,9 @@ MyVector::MyVector(const MyVector &other)
   std::copy(other.v, other.v + size, v);
 }
 
-MyVector::MyVector(MyVector&& other) noexcept {
-  std::move(other.v);
+MyVector::MyVector(MyVector&& other) noexcept
+    : size(other.size), capacity(other.capacity), v(other.v) {
+  other.clear();
 }
 
 MyVector::~MyVector() { delete[] v; }
