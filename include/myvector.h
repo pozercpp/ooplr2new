@@ -13,11 +13,11 @@ public:
   void pop();
   void clear();
 
-  unsigned char get(size_t) const;
+  unsigned char get(size_t);
 
   void swap(size_t, size_t);
 
-  size_t len() const;
+  size_t len();
 
   MyVector(MyVector&&);
   MyVector(const MyVector &);
