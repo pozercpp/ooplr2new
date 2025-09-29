@@ -38,7 +38,7 @@ Decimal::Decimal(unsigned long long n) : v() {
   }
 }
 
-Decimal::~Decimal() { v.clear(); }
+Decimal::~Decimal() {}
 
 Decimal::Decimal(const Decimal &other) : v(other.v) {}
 
