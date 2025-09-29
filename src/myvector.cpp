@@ -36,9 +36,9 @@ void MyVector::pop() {
   }
 }
 
-unsigned char MyVector::get(size_t i) const { return v[i]; }
+unsigned char MyVector::get(size_t i) { return v[i]; }
 
-size_t MyVector::len() const { return size; }
+size_t MyVector::len() { return size; }
 
 void MyVector::swap(size_t i, size_t j) {
   unsigned char c = v[i];
