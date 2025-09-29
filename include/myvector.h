@@ -19,7 +19,7 @@ public:
 
   size_t len();
 
-  MyVector(MyVector&&);
+  MyVector(MyVector&&) noexcept;
   MyVector(const MyVector &);
   MyVector();
   ~MyVector();
