@@ -5,11 +5,10 @@ int main() {
   unsigned long long aa;
   std::cin >> aa;
   Decimal a(aa);
-  Decimal b({1, 2, 3});
-  Decimal res1 = plus(a, b);
+  Decimal res1 = plus(a, {1, 2, 3});
   res1.print();
   std::cout << std::endl;
-  Decimal res2 = sub(a, b);
+  Decimal res2 = sub(a, {1, 2, 3});
   res2.print();
   std::cout << std::endl;
   return 0;
