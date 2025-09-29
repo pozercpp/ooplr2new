@@ -42,7 +42,7 @@ Decimal::~Decimal() {}
 
 Decimal::Decimal(const Decimal &other) : v(other.v) {}
 
-Decimal::Decimal(Decimal &&other) noexcept { std::move(other.v); }
+Decimal::Decimal(Decimal &&other) noexcept : v(other.v) { other.v.clear(); }
 
 int Decimal::len() { return v.len(); }
 
