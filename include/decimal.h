@@ -11,25 +11,25 @@ public:
   Decimal(unsigned long long);
   Decimal(unsigned int);
 
-  ~Decimal();
+  ~Decimal() noexcept;
   Decimal(const Decimal &);
   Decimal(Decimal &&) noexcept;
 
-  unsigned char get(size_t);
+  unsigned char get(size_t) const;
 
-  int len();
+  int len() const;
 
   void print();
 
   MyVector v;
+
+  static Decimal plus(const Decimal&, const Decimal&);
+  static Decimal sub(const Decimal&, const Decimal&);
+
+  static bool equals(const Decimal&, const Decimal&);
+  static bool greater(const Decimal&, const Decimal&);
+  static bool less(const Decimal&, const Decimal&);
+  static bool equalsgreater(const Decimal&, const Decimal&);
+  static bool equalsless(const Decimal&, const Decimal&);
+  static bool notequals(const Decimal&, const Decimal&);
 };
-
-Decimal plus(Decimal, Decimal);
-Decimal sub(Decimal, Decimal);
-
-bool equals(Decimal, Decimal);
-bool greater(Decimal, Decimal);
-bool less(Decimal, Decimal);
-bool equalsgreater(Decimal, Decimal);
-bool equalsless(Decimal, Decimal);
-bool notequals(Decimal, Decimal);
