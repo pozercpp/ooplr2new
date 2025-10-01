@@ -2,7 +2,7 @@
 #include <initializer_list>
 #include <iostream>
 
-unsigned char Decimal::get(size_t i) { return v.get(i); }
+unsigned char Decimal::get(size_t i) const { return v.get(i); }
 
 void Decimal::print() {
   for (int i = v.len() - 1; i > -1; --i) {
@@ -38,15 +38,15 @@ Decimal::Decimal(unsigned long long n) : v() {
   }
 }
 
-Decimal::~Decimal() {}
+Decimal::~Decimal() noexcept {}
 
 Decimal::Decimal(const Decimal &other) : v(other.v) {}
 
 Decimal::Decimal(Decimal &&other) noexcept : v(other.v) { other.v.clear(); }
 
-int Decimal::len() { return v.len(); }
+int Decimal::len() const { return v.len(); }
 
-bool equals(Decimal a, Decimal b) {
+bool Decimal::equals(const Decimal& a, const Decimal& b) {
   if (a.len() != b.len()) {
     return false;
   }
@@ -58,7 +58,7 @@ bool equals(Decimal a, Decimal b) {
   return true;
 }
 
-bool notequals(Decimal a, Decimal b) {
+bool Decimal::notequals(const Decimal& a, const Decimal& b) {
   if (a.len() != b.len()) {
     return true;
   }
@@ -70,7 +70,7 @@ bool notequals(Decimal a, Decimal b) {
   return false;
 }
 
-bool greater(Decimal a, Decimal b) {
+bool Decimal::greater(const Decimal& a, const Decimal& b) {
   if (a.len() != b.len()) {
     return a.len() > b.len();
   }
@@ -82,7 +82,7 @@ bool greater(Decimal a, Decimal b) {
   return true;
 }
 
-bool less(Decimal a, Decimal b) {
+bool Decimal::less(const Decimal& a, const Decimal& b) {
   if (a.len() != b.len()) {
     return a.len() < b.len();
   }
@@ -94,13 +94,13 @@ bool less(Decimal a, Decimal b) {
   return true;
 }
 
-bool equalsgreater(Decimal a, Decimal b) {
-  return greater(a, b) || equals(a, b);
+bool Decimal::equalsgreater(const Decimal& a, const Decimal& b) {
+  return Decimal::greater(a, b) || Decimal::equals(a, b);
 }
 
-bool equalsless(Decimal a, Decimal b) { return less(a, b) || equals(a, b); }
+bool Decimal::equalsless(const Decimal& a, const Decimal& b) { return Decimal::less(a, b) || Decimal::equals(a, b); }
 
-Decimal plus(Decimal a, Decimal b) {
+Decimal Decimal::plus(const Decimal& a, const Decimal& b) {
   if (a.len() < b.len()) {
     return plus(b, a);
   }
@@ -123,7 +123,7 @@ Decimal plus(Decimal a, Decimal b) {
   return res;
 }
 
-Decimal sub(Decimal a, Decimal b) {
+Decimal Decimal::sub(const Decimal& a, const Decimal& b) {
   if (less(a, b)) {
     return Decimal(0ull);
   }
